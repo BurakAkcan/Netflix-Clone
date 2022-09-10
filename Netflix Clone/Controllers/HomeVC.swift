@@ -29,7 +29,20 @@ class HomeVC: UIViewController {
         //TableView a HeaderView verebiliriz
         homeFeedTable.tableHeaderView = headerView
         
+        configureNavBar()
+        
 
+    }
+    
+    private func configureNavBar(){
+        var image = UIImage(named: "ic_netflix")
+        image = image?.withRenderingMode(.alwaysOriginal)//Resim daima orjinalliğini korur
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
+        navigationController?.navigationBar.tintColor = .label
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
+            UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil)
+        ]
     }
     
     override func viewDidLayoutSubviews() {
@@ -54,5 +67,13 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
+    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let defaultOffset = view.safeAreaInsets.top // Yukarıdaki top SafeArea yüksekliği
+        
+        let offset = scrollView.contentOffset.y + defaultOffset
+        
+        //NavigationBarı yavaşça gizlemek için transform metodnu kullanabiliriz
+        navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0, -offset + 20))
     }
 }

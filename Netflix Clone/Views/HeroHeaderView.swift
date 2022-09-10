@@ -14,6 +14,7 @@ class HeroHeaderView: UIView {
         button.setTitle("Download", for: .normal)
         button.layer.borderColor = UIColor.label.cgColor
         button.layer.borderWidth = 1
+        button.layer.cornerRadius = 6
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -23,6 +24,7 @@ class HeroHeaderView: UIView {
         button.setTitle("Play", for: .normal)
         button.layer.borderColor = UIColor.label.cgColor
         button.layer.borderWidth = 1
+        button.layer.cornerRadius = 6
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -46,12 +48,12 @@ class HeroHeaderView: UIView {
     
    private func applyConstraints(){
         let playButtonConstraints = [
-            playButton.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 90),
+            playButton.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 70),
             playButton.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -20),
             playButton.widthAnchor.constraint(equalToConstant: 100)
             ]
        let downloadButtonConstraints = [
-        downloadButton.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -90),
+        downloadButton.trailingAnchor.constraint(equalTo: trailingAnchor,constant: -70),
         downloadButton.bottomAnchor.constraint(equalTo: playButton.bottomAnchor),
         downloadButton.widthAnchor.constraint(equalTo: playButton.widthAnchor)
        ]
@@ -67,7 +69,7 @@ class HeroHeaderView: UIView {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [
             UIColor.clear.cgColor,
-            UIColor.systemBackground.cgColor
+            UIColor.systemGray.cgColor
         ]
         gradientLayer.frame = bounds
         layer.addSublayer(gradientLayer)
