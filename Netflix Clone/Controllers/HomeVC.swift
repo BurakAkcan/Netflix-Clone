@@ -49,13 +49,7 @@ class HomeVC: UIViewController {
 
     }
     
-     
-    
-  
-    
-    
-    
-    private func configureNavBar(){
+     private func configureNavBar(){
         var image = UIImage(named: "ic_netflix")
         image = image?.withRenderingMode(.alwaysOriginal)//Resim daima orjinalliğini korur
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .done, target: self, action: nil)
@@ -76,7 +70,7 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource{
         return sectionTitles.count
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 1
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as? MovieTableViewCell else{ return UITableViewCell() }
@@ -115,6 +109,7 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource{
                     print(error.localizedDescription)
                 case .success(let movies):
                     cell.configure(with: movies)
+                    print(movies)
                 }
             }
         case Section.TopRated.rawValue:

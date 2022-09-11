@@ -32,9 +32,9 @@ class MovieCollectionCell: UICollectionViewCell {
     }
     
     public func configure(with model:String){
-        print(model)
        
-        guard let url = URL(string: model) else{return}
+       
+        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model)") else{return}
         poserImageView.sd_setImage(with: url,completed: nil)
     }
     
