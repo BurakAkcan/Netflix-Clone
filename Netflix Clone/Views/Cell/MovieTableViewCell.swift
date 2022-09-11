@@ -7,22 +7,24 @@
 
 import UIKit
 
-class CollectionViewTableCell: UITableViewCell {
+class MovieTableViewCell: UITableViewCell {
 
    static let identifier = "CollectionViewTableCell"
+    
+    private var movies:Movies = []
     
     private let collectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 140, height: 200)
         layout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(MovieCollectionCell.self, forCellWithReuseIdentifier: MovieCollectionCell.identifier)
         return collectionView
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = .systemPink
+        contentView.backgroundColor = .black
         contentView.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -39,18 +41,30 @@ class CollectionViewTableCell: UITableViewCell {
         collectionView.frame = contentView.bounds
     }
     
+    public func configure(with movieList:Movies){
+        self.movies = movieList
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else{return}
+            self.collectionView.reloadData()
+            
+        }
+    }
+    
     
 }
 
 //MARK: - Extensions
-extension CollectionViewTableCell:UICollectionViewDelegate,UICollectionViewDataSource{
+extension MovieTableViewCell:UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return movies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .green
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionCell.identifier, for: indexPath) as? MovieCollectionCell else {return UICollectionViewCell()}
+        guard let poster = movies[indexPath.row].poster_path else{return UICollectionViewCell()}
+        cell.configure(with: poster)
+        #warning("configure düzeltilecek")
         return cell
+        
     }
 }
