@@ -157,7 +157,78 @@ class APICaller{
         task.resume()
     }
     
+    func getSearchMovies(completion:@escaping (Result<Movies,Error>)->Void ){
+        guard let url = URL(string: "\(Constants.baseUrl)/3/discover/movie?api_key=\(Constants.APIKey)&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate") else{return}
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let _ = error {
+                completion(.failure(AppError.invalidUrl))
+                
+            }
+            guard let response = response as? HTTPURLResponse,
+                  response.statusCode == 200 else{
+                completion(.failure(AppError.invalidResponse))
+               
+                return
+            }
+            guard let data = data else {
+               
+                return
+            }
+            
+            do{
+                let decoder = JSONDecoder()
+                let movies = try decoder.decode(TrendingTitleResponse.self, from: data)
+                completion(.success(movies.results))
+               
+            }catch{
+                completion(.failure(AppError.errorDecoding))
+            }
+
+        }
+        task.resume()
+    }
+    
+    func search(with query:String,completion:@escaping (Result<Movies,Error>)->()){
+        
+        guard let query =  query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else{return}
+        
+        guard let url = URL(string: "\(Constants.baseUrl)/3/search/movie?api_key=\(Constants.APIKey)&query=\(query)") else{return}
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let _ = error {
+                completion(.failure(AppError.invalidUrl))
+                
+            }
+            guard let response = response as? HTTPURLResponse,
+                  response.statusCode == 200 else{
+                completion(.failure(AppError.invalidResponse))
+               
+                return
+            }
+            guard let data = data else {
+               
+                return
+            }
+            
+            do{
+                let decoder = JSONDecoder()
+                let movies = try decoder.decode(TrendingTitleResponse.self, from: data)
+                completion(.success(movies.results))
+                print(movies.results.count)
+               
+            }catch{
+                completion(.failure(AppError.errorDecoding))
+            }
+
+        }
+        task.resume()
+        
+    }
+    
     
 }
 // https://api.themoviedb.org/3/movie/upcoming?api_key=<<api_key>>&language=en-US&page=1
 //https://api.themoviedb.org/3/movie/popular?api_key=<<api_key>>&language=en-US&page=1
+//https://api.themoviedb.org/3/discover/movie?api_key=<<api_key>>&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate
+
+
+

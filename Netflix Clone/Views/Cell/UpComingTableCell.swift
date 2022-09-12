@@ -7,6 +7,8 @@
 
 import UIKit
 import SDWebImage
+import Kingfisher
+
 
 class UpComingTableCell: UITableViewCell {
     
@@ -94,8 +96,10 @@ class UpComingTableCell: UITableViewCell {
     }
     
     public func configure(with model:MovieViewModel){
-        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.posterUrl)") else{return}
-        posterImageView.sd_setImage(with: url,completed: nil)
+        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.posterUrl)") else{
+            
+            return}
+        posterImageView.kf.setImage(with: url)
         titleLabel.text = model.titleName
     }
     

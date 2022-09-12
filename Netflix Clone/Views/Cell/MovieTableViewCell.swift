@@ -9,7 +9,7 @@ import UIKit
 
 class MovieTableViewCell: UITableViewCell {
 
-   static let identifier = "CollectionViewTableCell"
+   static let identifier = "MovieTableViewCell"
     
     private var movies:Movies = []
     

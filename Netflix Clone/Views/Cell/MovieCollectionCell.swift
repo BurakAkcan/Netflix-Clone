@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import Kingfisher
 
 class MovieCollectionCell: UICollectionViewCell {
     static let identifier = "MovieCollectionCell"
@@ -35,7 +36,8 @@ class MovieCollectionCell: UICollectionViewCell {
        
        
         guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model)") else{return}
-        poserImageView.sd_setImage(with: url,completed: nil)
+      
+        poserImageView.kf.setImage(with: url)
     }
     
     
