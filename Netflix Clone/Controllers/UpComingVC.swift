@@ -13,7 +13,7 @@ class UpComingVC: UIViewController {
     
     private let upComingTableView:UITableView = {
        let tableView = UITableView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UpComingTableCell.self, forCellReuseIdentifier: UpComingTableCell.identifer)
         return tableView
     }()
 
@@ -61,8 +61,13 @@ extension UpComingVC:UITableViewDelegate,UITableViewDataSource{
         return upComingList.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = upComingTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = upComingList[indexPath.row].original_name ?? upComingList[indexPath.row].original_title ?? "Unknown"
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: UpComingTableCell.identifer, for: indexPath) as? UpComingTableCell
+        else {return UITableViewCell()}
+        let item = upComingList[indexPath.row]
+        cell.configure(with: MovieViewModel(titleName: item.original_title ?? item.original_name ?? "Unknown", posterUrl: item.poster_path ?? ""))
         return cell
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
     }
 }
