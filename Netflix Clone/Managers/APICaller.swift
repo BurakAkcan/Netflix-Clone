@@ -10,6 +10,8 @@ import Foundation
 struct Constants{
     static let APIKey:String  = "cd42c3e6482ca41c298fb893cf2f60dc"
     static let baseUrl:String = "https://api.themoviedb.org"
+    static let YoutubeApi_Key = "AIzaSyA5XghDp9uGBDao4FsiNNjpI1oqBD2rzTY"
+    static let youtubBaseUrl = "https://youtube.googleapis.com/youtube/v3/search?"
 }
 
 
@@ -217,6 +219,46 @@ class APICaller{
                
             }catch{
                 completion(.failure(AppError.errorDecoding))
+            }
+
+        }
+        task.resume()
+        
+    }
+    
+    func getMovie(with query:String,completion:@escaping (Result<VideoElement,Error>)->Void){
+        
+        //Araya boşluktan dolayı koymsı gerekn %20 işeretini ekler
+        guard let query =  query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else{return}
+        
+        guard let url = URL(string: "\(Constants.youtubBaseUrl)q=\(query)&key=\(Constants.YoutubeApi_Key)") else{return}
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let _ = error {
+                
+                
+            }
+            guard let response = response as? HTTPURLResponse,
+                  response.statusCode == 200 else{
+                
+               
+                return
+            }
+            guard let data = data else {
+               
+                return
+            }
+            
+            do{
+                let decoder = JSONDecoder()
+                let results = try decoder.decode(YoutubeModel.self, from: data)
+                completion(.success(results.items[0])) //ilk elemanı completion ediyoruz
+                
+               
+               
+            }catch{
+                completion(.failure(error))
+                print(error.localizedDescription)
             }
 
         }

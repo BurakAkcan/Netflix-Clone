@@ -44,9 +44,6 @@ class HomeVC: UIViewController {
         homeFeedTable.tableHeaderView = headerView
         
         configureNavBar()
-       
-        
-
     }
     
      private func configureNavBar(){
@@ -74,6 +71,8 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as? MovieTableViewCell else{ return UITableViewCell() }
+        cell.delegate = self
+        
         switch indexPath.section {
         case Section.TrendingMovies.rawValue:
             APICaller.shared.getTrending { result in
@@ -109,7 +108,7 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource{
                     print(error.localizedDescription)
                 case .success(let movies):
                     cell.configure(with: movies)
-                    print(movies)
+                   // print(movies)
                 }
             }
         case Section.TopRated.rawValue:
@@ -156,4 +155,19 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource{
         header.textLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)   
         header.textLabel?.frame = CGRect(x: header.bounds.origin.x + 20 , y: header.bounds.origin.y, width: 100, height: header.bounds.height)
     }
+}
+
+
+extension HomeVC:MovieTableViewCellDelegate{
+    func MovieTableViewCellDidTapCell(_ cell: MovieTableViewCell, viewModel: MoviePreviewViewModel) {
+        
+        DispatchQueue.main.async {
+            let vc = MoviePreviewVC()
+            vc.configure(with: viewModel)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+    }
+    
+    
 }

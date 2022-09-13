@@ -7,11 +7,16 @@
 
 import UIKit
 
+protocol MovieTableViewCellDelegate:AnyObject{
+    func MovieTableViewCellDidTapCell(_ cell:MovieTableViewCell,viewModel:MoviePreviewViewModel)
+}
+
 class MovieTableViewCell: UITableViewCell {
 
    static let identifier = "MovieTableViewCell"
     
     private var movies:Movies = []
+    weak var delegate:MovieTableViewCellDelegate?
     
     private let collectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -66,5 +71,23 @@ extension MovieTableViewCell:UICollectionViewDelegate,UICollectionViewDataSource
         #warning("configure düzeltilecek")
         return cell
         
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let movie = movies[indexPath.row]
+        guard let movieName = movie.original_title ?? movie.original_name else{return}
+        
+        APICaller.shared.getMovie(with: movieName + "trailer") {[weak self] result in
+            guard let self = self else{return}
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let element):
+                print(element.id)
+                let item = self.movies[indexPath.row]
+                let viewModel = MoviePreviewViewModel(title: item.original_name ?? item.original_title ?? "", youtubeView: element, movieOverView: item.overview ?? "")
+                self.delegate?.MovieTableViewCellDidTapCell(self, viewModel: viewModel)
+            }
+        }
     }
 }
