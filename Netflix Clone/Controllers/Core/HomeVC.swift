@@ -21,6 +21,8 @@ class HomeVC: UIViewController {
     
     let sectionTitles:[String] = ["Trending Movies","Popular","Trending TV","Upcoming Movie","Top Rated"]
     var movieList:Movies = []
+    private var randomTrendingMovie:Movie?
+    private var headerView:HeroHeaderView?
     
     
     //MARK: - UIViews
@@ -37,13 +39,28 @@ class HomeVC: UIViewController {
         view.addSubview(homeFeedTable)
         homeFeedTable.delegate = self
         homeFeedTable.dataSource = self
-        let headerView = HeroHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+        headerView = HeroHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         
         
         //TableView a HeaderView verebiliriz
         homeFeedTable.tableHeaderView = headerView
         
         configureNavBar()
+        configureHeroHeaderView()
+    }
+    
+    private func configureHeroHeaderView(){
+        APICaller.shared.getTrending { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let movies):
+                let selectMovie = movies.randomElement()
+                self?.randomTrendingMovie = selectMovie
+                
+                self?.headerView?.configure(with: MovieViewModel(titleName: selectMovie?.original_title ?? "", posterUrl: selectMovie?.poster_path ?? ""))
+            }
+        }
     }
     
      private func configureNavBar(){

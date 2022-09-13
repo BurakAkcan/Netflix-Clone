@@ -85,4 +85,14 @@ class HeroHeaderView: UIView {
         heroImageView.frame = bounds
     }
     
+    public func configure(with model:MovieViewModel){
+        guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.posterUrl)") else{
+            
+            return}
+        DispatchQueue.main.async {
+            self.heroImageView.kf.setImage(with: url)
+        }
+        
+    }
+    
 }
