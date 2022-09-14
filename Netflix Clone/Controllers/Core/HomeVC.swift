@@ -21,7 +21,6 @@ class HomeVC: UIViewController {
     
     let sectionTitles:[String] = ["Trending Movies","Popular","Trending TV","Upcoming Movie","Top Rated"]
     var movieList:Movies = []
-    private var randomTrendingMovie:Movie?
     private var headerView:HeroHeaderView?
     
     
@@ -56,9 +55,7 @@ class HomeVC: UIViewController {
                 print(error.localizedDescription)
             case .success(let movies):
                 let selectMovie = movies.randomElement()
-                self?.randomTrendingMovie = selectMovie
-                
-                self?.headerView?.configure(with: MovieViewModel(titleName: selectMovie?.original_title ?? "", posterUrl: selectMovie?.poster_path ?? ""))
+              self?.headerView?.configure(with: MovieViewModel(titleName: selectMovie?.original_title ?? "", posterUrl: selectMovie?.poster_path ?? ""))
             }
         }
     }

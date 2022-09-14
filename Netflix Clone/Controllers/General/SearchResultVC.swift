@@ -6,10 +6,14 @@
 //
 
 import UIKit
+protocol SearchResultVCDelegate:AnyObject{
+    func searchResultVCDidTapped(_ viewModel:MoviePreviewViewModel)
+}
 
 class SearchResultVC: UIViewController {
     
     public var movieList:Movies = []
+    public weak var delegate:SearchResultVCDelegate?
     
     public let searchResultCollectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -51,5 +55,22 @@ extension SearchResultVC:UICollectionViewDelegate,UICollectionViewDataSource{
         cell.configure(with: item.poster_path ?? "")
         
         return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let movie = movieList[indexPath.row]
+        let movieName = movie.original_title ??  ""
+        
+        APICaller.shared.getMovie(with: movieName) { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let element):
+                self?.delegate?.searchResultVCDidTapped(MoviePreviewViewModel(title: movie.original_title ?? movie.original_name ?? "", youtubeView: element, movieOverView: movie.overview ?? "Unknown"))
+                
+            }
+        }
+        
+        
     }
 }

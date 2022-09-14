@@ -14,7 +14,8 @@ class MoviePreviewVC: UIViewController {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.text = "Harry Potter" // Değişcek
+        label.minimumScaleFactor = 0.6
+        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
@@ -81,6 +82,7 @@ class MoviePreviewVC: UIViewController {
             
             movieLabel.topAnchor.constraint(equalTo: webView.bottomAnchor, constant: 20),
             movieLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            movieLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
             //Set overViewLabel UI
             

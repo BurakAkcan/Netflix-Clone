@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class SearchVC: UIViewController {
     
     private var movies:Movies = []
@@ -82,9 +83,26 @@ extension SearchVC:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let movie = movies[indexPath.row]
+        guard let movieName = movie.original_name ?? movie.original_title else{return}
+        APICaller.shared.getMovie(with: movieName) { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let element):
+                DispatchQueue.main.async {
+                    let vc = MoviePreviewVC()
+                    vc.configure(with: MoviePreviewViewModel(title: movieName, youtubeView: element, movieOverView: movie.overview ?? "Unkonown"))
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+        }
+    }
 }
 
-extension SearchVC:UISearchResultsUpdating{
+extension SearchVC:UISearchResultsUpdating,SearchResultVCDelegate{
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         
@@ -92,6 +110,7 @@ extension SearchVC:UISearchResultsUpdating{
               !query.trimmingCharacters(in: .whitespaces).isEmpty,
               query.trimmingCharacters(in: .whitespaces).count > 2,
               let resultController = searchController.searchResultsController as? SearchResultVC  else{return}
+        resultController.delegate = self
         APICaller.shared.search(with: query) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -102,6 +121,14 @@ extension SearchVC:UISearchResultsUpdating{
                     print(error.localizedDescription)
                 }
             }
+        }
+    }
+    
+    func searchResultVCDidTapped(_ viewModel: MoviePreviewViewModel) {
+        DispatchQueue.main.async {
+            let vc = MoviePreviewVC()
+            vc.configure(with: viewModel)
+            self.navigationController?.pushViewController(vc, animated: true)
         }
     }
     
