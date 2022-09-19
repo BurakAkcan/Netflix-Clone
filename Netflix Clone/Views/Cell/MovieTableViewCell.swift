@@ -55,6 +55,19 @@ class MovieTableViewCell: UITableViewCell {
         }
     }
     
+    private func downloadMovieAt(indexPath:IndexPath){
+        DataPersistanceManager.shared.downloadMovie(model: movies[indexPath.row]) { [weak self] result in
+            guard let self = self else{return}
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success():
+                print("Succes download database ")
+            }
+        }
+        
+    }
+    
     
 }
 
@@ -97,8 +110,7 @@ extension MovieTableViewCell:UICollectionViewDelegate,UICollectionViewDataSource
             identifier: nil,
             previewProvider: nil) { _ in
                 let downloadAction = UIAction(title: "Download", subtitle: nil, image: UIImage(systemName: "arrow.down.doc"), identifier: nil, discoverabilityTitle: nil,  state: .off) { _ in
-                    print("Downoad Tap")
-                }
+                    self.downloadMovieAt(indexPath: indexPath)                }
                 return UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [downloadAction])
             }
         return config
