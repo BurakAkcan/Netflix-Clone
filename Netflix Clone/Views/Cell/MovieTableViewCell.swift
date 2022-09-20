@@ -18,6 +18,7 @@ class MovieTableViewCell: UITableViewCell {
     private var movies:Movies = []
     weak var delegate:MovieTableViewCellDelegate?
     
+    
     private let collectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 140, height: 200)
@@ -56,13 +57,16 @@ class MovieTableViewCell: UITableViewCell {
     }
     
     private func downloadMovieAt(indexPath:IndexPath){
-        DataPersistanceManager.shared.downloadMovie(model: movies[indexPath.row]) { [weak self] result in
-            guard let self = self else{return}
+  
+        DataPersistanceManager.shared.downloadMovie(model: movies[indexPath.row]) {  result in
+           
             switch result {
             case .failure(let error):
                 print(error.localizedDescription)
             case .success():
+                NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: nil)
                 print("Succes download database ")
+                
             }
         }
         

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		544433A728D070BD00EBCE52 /* YoutubeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 544433A628D070BD00EBCE52 /* YoutubeModel.swift */; };
+		5456F19A28D9FBC100F39B1D /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5456F19928D9FBC100F39B1D /* UIViewController+Extension.swift */; };
 		545E0A3D28CF9F520016368C /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 545E0A3C28CF9F520016368C /* Kingfisher */; };
 		545E0A3F28CFA8E00016368C /* SearchResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545E0A3E28CFA8E00016368C /* SearchResultVC.swift */; };
 		5462115028CE532700663236 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5462114F28CE532700663236 /* Movie.swift */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		544433A628D070BD00EBCE52 /* YoutubeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeModel.swift; sourceTree = "<group>"; };
+		5456F19928D9FBC100F39B1D /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		545E0A3E28CFA8E00016368C /* SearchResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultVC.swift; sourceTree = "<group>"; };
 		5462114F28CE532700663236 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		5462115128CE5A3400663236 /* MovieCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionCell.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				54B53ADF28CDBC1E00A5DEDE /* String+Extension.swift */,
+				5456F19928D9FBC100F39B1D /* UIViewController+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 				544433A728D070BD00EBCE52 /* YoutubeModel.swift in Sources */,
 				546591B828D0B5AC00BFA789 /* MoviePreviewVC.swift in Sources */,
 				5496C2B728CC91BC006BBF7F /* UpComingVC.swift in Sources */,
+				5456F19A28D9FBC100F39B1D /* UIViewController+Extension.swift in Sources */,
 				54E5AE7128CCFF7300872E46 /* APICaller.swift in Sources */,
 				5496C2B528CC919B006BBF7F /* HomeVC.swift in Sources */,
 				546591BA28D0C41200BFA789 /* MoviePreviewViewModel.swift in Sources */,

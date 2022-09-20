@@ -11,11 +11,17 @@ import CoreData
 
 enum DatabaseError:LocalizedError{
     case failedToSave
+    case failedFetchData
+    case failedDeleteItemFromDatabase
     
     var errorDescription: String?  {
         switch self {
         case .failedToSave:
             return "Error to saving item"
+        case .failedFetchData:
+            return "Error to fetching datas"
+        case .failedDeleteItemFromDatabase:
+            return "Error to delete item"
         }
     }
     
@@ -47,6 +53,34 @@ class DataPersistanceManager{
         }catch{
             print(error.localizedDescription)
             completion(.failure(DatabaseError.failedToSave))
+        }
+    }
+    
+    func fetchMoviesFromDatabase(comletion:@escaping (Result<[MovieItem],Error>)->Void){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else{return}
+        let context = appDelegate.persistentContainer.viewContext
+        let request:NSFetchRequest<MovieItem>
+        request = MovieItem.fetchRequest()
+        
+        do{
+          let movies = try context.fetch(request)
+            comletion(.success(movies))
+        }catch{
+            comletion(.failure(DatabaseError.failedFetchData))
+            
+        }
+    }
+    
+    func deleteMovie(model:MovieItem,completion:@escaping (Result<Void,Error>)->Void){
+        guard let delegate = UIApplication.shared.delegate as? AppDelegate else{return}
+        let context = delegate.persistentContainer.viewContext
+        context.delete(model)
+        
+        do{
+            try context.save()
+            completion(.success(()))
+        }catch{
+            completion(.failure(DatabaseError.failedDeleteItemFromDatabase))
         }
     }
 }
